@@ -1,6 +1,7 @@
 #include <Arduino.h>
 
 #define ADC_PIN 4
+#define RELAY_PIN 17
 #define VREF 3.0
 #define ADC_RESOLUTION 4095.0
 #define LED_PIN 16
@@ -17,6 +18,8 @@ void setup(){
   //start the serial monitor at baude rate of 115200
   Serial.begin(115200);
   pinMode (LED_PIN, OUTPUT); //init pin 16 as output
+  pinMode(RELAY_PIN, OUTPUT); //set pin 17 as relay output
+  digitalWrite(RELAY_PIN, LOW); //set original state of the relay to low
   analogReadResolution(12); //set the ADC resolution to 12 bits (0-4095)
   Serial.println("Setup is ready!");
 
@@ -38,12 +41,16 @@ void loop(){
 
   if (voltage < VOLTAGE_THRESHOLD ){
     digitalWrite(LED_PIN, HIGH); //turn on the led if the voltage is below the threshold
+    digitalWrite(RELAY_PIN, HIGH); //activate the relay when it gets dark
     Serial.println("The LED is on. Voltage is below threshold.");
+    Serial.println("The relay is on.");
   }
   else if (voltage > VOLTAGE_THRESHOLD){
-    digitalWrite(LED_PIN, LOW); //turn on the led if the voltage is below the threshold
+    digitalWrite(LED_PIN, LOW); //turn off the led if the voltage is below the threshold
+    digitalWrite(RELAY_PIN, LOW); //turn off the relay when it is bright
     Serial.println("The LED is off. Voltage is above threshold.");
+    Serial.println("The relay is off.");
   } 
 
-  delay(100);
+  delay(200);
 }
