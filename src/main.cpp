@@ -20,10 +20,6 @@ void setup(){
   analogReadResolution(12); //set the ADC resolution to 12 bits (0-4095)
   Serial.println("Setup is ready!");
 
-  //analogSetPinAttenuation(4, ADC_0db); // Set attenuation for GPIO 4
-  //analogSetPinAttenuation(4, ADC_2_5db); // Set attenuation for GPIO 4
-  //analogSetPinAttenuation(4, ADC_6db); // Set attenuation for GPIO 4
-  //analogSetPinAttenuation(4, ADC_11db); // Set attenuation for GPIO 4
 }
 
 
