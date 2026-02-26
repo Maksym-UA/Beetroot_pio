@@ -23,10 +23,7 @@ void setup(){
   //analogSetPinAttenuation(4, ADC_0db); // Set attenuation for GPIO 4
   //analogSetPinAttenuation(4, ADC_2_5db); // Set attenuation for GPIO 4
   //analogSetPinAttenuation(4, ADC_6db); // Set attenuation for GPIO 4
-  analogSetPinAttenuation(4, ADC_11db); // Set attenuation for GPIO 4
-
-
-  
+  //analogSetPinAttenuation(4, ADC_11db); // Set attenuation for GPIO 4
 }
 
 
@@ -45,11 +42,11 @@ void loop(){
 
   if (voltage < VOLTAGE_THRESHOLD ){
     digitalWrite(LED_PIN, HIGH); //turn on the led if the voltage is below the threshold
-    //Serial.println("The LED is on. Voltage is below threshold.");
+    Serial.println("The LED is on. Voltage is below threshold.");
   }
   else if (voltage > VOLTAGE_THRESHOLD){
     digitalWrite(LED_PIN, LOW); //turn on the led if the voltage is below the threshold
-    //Serial.println("The LED is off. Voltage is above threshold.");
+    Serial.println("The LED is off. Voltage is above threshold.");
   } 
 
   delay(100);
