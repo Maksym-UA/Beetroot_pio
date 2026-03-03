@@ -5,11 +5,10 @@
 #define VREF 3.0
 #define ADC_RESOLUTION 4095.0
 #define LED_PIN 16
-// Налаштування гістерезису
-const int darkThreshold = 1200;  // Turn ON when it gets this dark
-const int lightThreshold = 1800; // Turn OFF only when it gets this bright
+#define VOLTAGE_THRESHOLD 1.3
+#define VOLTAGE_GIST 0.2
 
-bool relayState = false; // Track current state (false = OFF, true = ON)
+volatile bool relayState = false; // Track current state (false = OFF, true = ON)
 
 float getVoltage(int adcValue){
   //convert ADC value to voltage on the sensor
@@ -18,10 +17,9 @@ float getVoltage(int adcValue){
 
 
 void setup() {
-  //start the serial monitor at baude rate of 115200
-  Serial.begin(115200);
-  pinMode (LED_PIN, OUTPUT); //init pin 16 as output
-  pinMode(RELAY_PIN, OUTPUT); //set pin 17 as relay output
+  Serial.begin(115200); //start the serial monitor at baude rate of 115200
+  pinMode (LED_PIN, OUTPUT);
+  pinMode(RELAY_PIN, OUTPUT);
   digitalWrite(RELAY_PIN, HIGH); // Default OFF
   analogReadResolution(12); //set the ADC resolution to 12 bits (0-4095)
   Serial.println("Setup is ready!");
@@ -33,19 +31,19 @@ void loop() {
   float voltage = getVoltage(adcValue); //convert ADC value to voltage
   Serial.printf(
     "ADC value: %d, Voltage %.2f V\n", adcValue, voltage);
- 
 
-  if (!relayState && adcValue < darkThreshold) {
+
+  if (!relayState && voltage < VOLTAGE_THRESHOLD - VOLTAGE_GIST) {
     // If it was OFF and gets dark enough, turn it ON
-    digitalWrite(RELAY_PIN, LOW); 
-    digitalWrite(LED_PIN, HIGH); //turn on the led if the voltage is below the threshold
+    digitalWrite(RELAY_PIN, LOW);
+    digitalWrite(LED_PIN, HIGH);
     relayState = true;
     Serial.println("Relay Triggered: ON");
-  } 
-  else if (relayState && adcValue > lightThreshold) {
+  }
+  else if (relayState && voltage > VOLTAGE_THRESHOLD + VOLTAGE_GIST) {
     // If it was ON and gets bright enough, turn it OFF
-    digitalWrite(RELAY_PIN, HIGH); 
-    digitalWrite(LED_PIN, LOW); //turn on the led if the voltage is below the threshold
+    digitalWrite(RELAY_PIN, HIGH);
+    digitalWrite(LED_PIN, LOW);
     relayState = false;
     Serial.println("Relay Triggered: OFF");
   }
